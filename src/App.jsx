@@ -6,12 +6,25 @@ import TabButton from "./components/TabButton/TabButton.jsx";
 import { EXAMPLES } from "./data.js";
 
 function App() {
-  const selectedContent = "components";
-  const [stateContent, setContent] = useState(selectedContent);
+  const [stateContent, setContent] = useState();
 
   function handleClick(selectedButton) {
     setContent(selectedButton);
   }
+  function handleActive(value){
+    return stateContent === value;
+  }
+  let tabContent = <p>Please select a topic !</p>;
+  if(stateContent){
+    tabContent = <div id="tab-content">
+            <h3>{EXAMPLES[stateContent].title}</h3>
+            <p>{EXAMPLES[stateContent].description}</p>
+            <pre>
+              <code>{EXAMPLES[stateContent].code}</code>
+            </pre>
+          </div>
+  }
+
   return (
     <div>
       <Header />
@@ -28,20 +41,22 @@ function App() {
         <section id="examples">
           <h2>Examples</h2>
           <menu>
-            <TabButton onSelect={() => handleClick("components")}>
+            <TabButton 
+            isSelected={handleActive("components")}
+            onSelect={() => handleClick("components")}>
               Components
             </TabButton>
-            <TabButton onSelect={() => handleClick("jsx")}>JSX</TabButton>
-            <TabButton onSelect={() => handleClick("props")}>Props</TabButton>
-            <TabButton onSelect={() => handleClick("state")}>State</TabButton>
+            <TabButton
+             isSelected={handleActive("jsx")}
+             onSelect={() => handleClick("jsx")}>JSX</TabButton>
+            <TabButton 
+            isSelected={handleActive("props")}
+            onSelect={() => handleClick("props")}>Props</TabButton>
+            <TabButton 
+            isSelected={handleActive("state")}
+            onSelect={() => handleClick("state")}>State</TabButton>
           </menu>
-          <div id="tab-content">
-            <h3>{EXAMPLES[stateContent].title}</h3>
-            <p>{EXAMPLES[stateContent].description}</p>
-            <pre>
-              <code>{EXAMPLES[stateContent].code}</code>
-            </pre>
-          </div>
+          {tabContent}
         </section>
       </main>
     </div>
